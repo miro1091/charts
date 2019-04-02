@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -7,13 +7,14 @@ import {
 } from "react-router-dom";
 import { Layout, Menu, Icon } from "antd";
 import "antd/dist/antd.css";
+import {
+  ApexCharts,
+  Chart,
+  ChartsMaps,
+  HighCharts,
+  PlotlyChart
+} from "./charts";
 import "./App.css";
-
-import ApexCharts from "./components/ApexCharts";
-import Chart from "./components/Chart";
-import ChartsMaps from "./components/ChartsMaps";
-import HighCharts from "./components/HighCharts";
-import PlotlyChart from "./components/Plotly";
 
 const { Footer, Content, Sider } = Layout;
 
