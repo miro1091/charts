@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { Suspense } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -7,13 +7,6 @@ import {
 } from "react-router-dom";
 import { Layout, Menu, Icon } from "antd";
 import "antd/dist/antd.css";
-import {
-  ApexCharts,
-  Chart,
-  ChartsMaps,
-  HighCharts,
-  PlotlyChart
-} from "./charts";
 import "./App.css";
 
 const { Footer, Content, Sider } = Layout;
@@ -38,18 +31,24 @@ const App = () => {
               </NavLink>
             </Menu.Item>
             <Menu.Item key="3">
+              <NavLink to="/amcharts">
+                <Icon type="upload" />
+                <span className="nav-text">AmCharts</span>
+              </NavLink>
+            </Menu.Item>
+            <Menu.Item key="4">
               <NavLink to="/plotly">
                 <Icon type="upload" />
                 <span className="nav-text">Plotly</span>
               </NavLink>
             </Menu.Item>
-            <Menu.Item key="4">
+            <Menu.Item key="5">
               <NavLink to="/high-charts">
                 <Icon type="upload" />
                 <span className="nav-text">HighCharts</span>
               </NavLink>
             </Menu.Item>
-            <Menu.Item key="5">
+            <Menu.Item key="6">
               <NavLink to="/apex-charts">
                 <Icon type="upload" />
                 <span className="nav-text">ApexCharts</span>
@@ -61,11 +60,43 @@ const App = () => {
           <Content style={{ margin: "24px 16px 0" }}>
             <div style={{ padding: 24, background: "#fff", minHeight: 360 }}>
               <Switch>
-                <Route exact path="/" component={Chart} />
-                <Route path="/apex-charts" component={ApexCharts} />
-                <Route path="/charts-maps" component={ChartsMaps} />
-                <Route path="/high-charts" component={HighCharts} />
-                <Route path="/plotly" component={PlotlyChart} />
+                <Route
+                  exact
+                  path="/"
+                  render={() => (
+                    <LazyComponent from={import("./charts/Chart")} />
+                  )}
+                />
+                <Route
+                  path="/apex-charts"
+                  render={() => (
+                    <LazyComponent from={import("./charts/ApexCharts")} />
+                  )}
+                />
+                <Route
+                  path="/charts-maps"
+                  render={() => (
+                    <LazyComponent from={import("./charts/ChartsMaps")} />
+                  )}
+                />
+                <Route
+                    path="/amcharts"
+                    render={() => (
+                        <LazyComponent from={import("./charts/ChartsMaps")} />
+                    )}
+                />
+                <Route
+                  path="/high-charts"
+                  render={() => (
+                    <LazyComponent from={import("./charts/HighCharts")} />
+                  )}
+                />
+                <Route
+                  path="/plotly"
+                  render={() => (
+                    <LazyComponent from={import("./charts/Plotly")} />
+                  )}
+                />
               </Switch>
             </div>
           </Content>
@@ -75,5 +106,18 @@ const App = () => {
     </Router>
   );
 };
+
+export function LazyComponent({ from }) {
+  const Component = React.lazy(() =>
+    from.then(null, err => ({
+      default: () => <div>{err.message}</div>
+    }))
+  );
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <Component />
+    </Suspense>
+  );
+}
 
 export default App;

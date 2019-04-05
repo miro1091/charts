@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import Plot from "react-plotly.js";
+import React, { useState, useEffect } from "react";
+import Plotly from 'plotly.js';
 
 const PlotlyChart = () => {
   const [data] = useState([
@@ -38,15 +38,14 @@ const PlotlyChart = () => {
     ]
   });
 
+  useEffect(() => {
+    Plotly.newPlot('myDiv', data, layout);
+  }, [])
+
   return (
     <>
       <h2>Plotly - npm(1,905) - responsive(6/10)</h2>
-      <Plot
-        data={data}
-        layout={layout}
-        style={{ width: "100%", height: "100%" }}
-        useResizeHandler={true}
-      />
+      <div id={"myDiv"} />
     </>
   );
 };
